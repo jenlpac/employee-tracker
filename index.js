@@ -119,7 +119,7 @@ function addRole() {
                 value: id
             }))
         
-            // Prompt for data:
+            // Prompt for role data:
             inquirer.prompt([
                 {
                     type: 'input',
@@ -149,7 +149,57 @@ function addRole() {
 
 // Add new employee:
 function addEmployee() {
-
+    // Query roles for role choices:
+    db.getRoles()
+        .then(([rows, fields]) => {
+            const roles = rows;
+            const roleList = roles.map(({ id, title, salary, department_id }) => ({
+                name: title,
+                value: id
+            }))
+            // Query employees for manager choices:
+            db.getEmployees()
+                .then(([rows, fields]) => {
+                    const employees = rows;
+                    const employeeList = employees.map(({ id, first_name, last_name, role_id, manager_id }) => ({
+                        name: `${first_name} ${last_name}`,
+                        value: id
+                    }))
+                    // Add option for no manager:
+                    employeeList.push({ name: 'None', value: null});
+                    // Prompt for employee data:
+                    inquirer.prompt([
+                        // first name, last name, role id, manager id
+                        {
+                            type: 'input',
+                            name: 'first_name',
+                            message: "What is the new employee's first name?"
+                        },
+                        {
+                            type: 'input',
+                            name: 'last_name',
+                            message: "What is this employee's last name?"
+                        },
+                        {
+                            type: 'list',
+                            name: 'role_id',
+                            choices: roleList
+                        },
+                        {
+                            type: 'list',
+                            name: 'manager_id',
+                            choices: employeeList
+                        }
+                    ])
+                    // Create new role:
+                    .then(response => {
+                        const name = response;
+                        db.createEmployee(name)
+                            .then(() => console.log(`Added ${name.first_name} ${name.last_name} to employees.`))
+                            .then(() => options())
+                    })
+                })
+        })
 };
 
 // Update employee role:
