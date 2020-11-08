@@ -23,6 +23,12 @@ class DB {
             `SELECT * FROM employee;`
         );
     }
+    // Query to create a new department:
+    createDepartment(department) {
+        return this.connection.promise().query(
+            `INSERT INTO department SET ?`, department
+        )
+    }
 }
 
 module.exports = new DB(connection);

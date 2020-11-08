@@ -91,7 +91,20 @@ function viewEmployees() {
 
 // Add new department:
 function addDepartment() {
-
+    // Prompt for data:
+    inquirer.prompt([
+        {
+            type: 'input',
+            name: 'name',
+            message: 'What is the name of the new department?'
+        }
+    ])
+    .then(response => {
+        const name = response;
+        db.createDepartment(name)
+            .then(() => console.log(`Added ${name.name} to the database`))
+            .then(() => options());
+    })
 };
 
 // Add new role:
