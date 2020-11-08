@@ -4,11 +4,11 @@ require('console.table');
 
 // Create app heading:
 function start() {
-    console.log("**********************************");
-    console.log("*                                *");
-    console.log("*        EMPLOYEE TRACKER        *");
-    console.log("*                                *");
-    console.log("**********************************");
+    console.log("******************************************");
+    console.log("*                                        *");
+    console.log("*            EMPLOYEE TRACKER            *");
+    console.log("*                                        *");
+    console.log("******************************************");
     options();
 }
 
@@ -65,6 +65,7 @@ function viewDepartments() {
         .then(([rows, fields]) => {
             const departments = rows;
             console.table(departments);
+            console.log('*********************************');
         })
         .then(() => options());
 };
@@ -75,6 +76,7 @@ function viewRoles() {
         .then(([rows, fields]) => {
             const roles = rows;
             console.table(roles);
+            console.log('*********************************');
         })
         .then(() => options());
 };
@@ -85,6 +87,7 @@ function viewEmployees() {
         .then(([rows, fields]) => {
             const employees = rows;
             console.table(employees);
+            console.log('*********************************');
         })
         .then(() => options());
 };
@@ -104,6 +107,7 @@ function addDepartment() {
         const name = response;
         db.createDepartment(name)
             .then(() => console.log(`Added ${name.name} to departments.`))
+            .then(() => console.log('*********************************'))
             .then(() => options());
     })
 };
@@ -142,6 +146,7 @@ function addRole() {
                 const name = response;
                 db.createRole(name)
                     .then(() => console.log(`Added ${name.title} to roles.`))
+                    .then(() => console.log('*********************************'))
                     .then(() => options())
             })
         })
@@ -196,6 +201,7 @@ function addEmployee() {
                         const name = response;
                         db.createEmployee(name)
                             .then(() => console.log(`Added ${name.first_name} ${name.last_name} to employees.`))
+                            .then(() => console.log('*********************************'))
                             .then(() => options())
                     })
                 })
@@ -204,7 +210,47 @@ function addEmployee() {
 
 // Update employee role:
 function updateRole() {
-
+    // Query employees:
+    db.getEmployees()
+        .then(([rows, fields]) => {
+            const employees = rows;
+            const employeeList = employees.map(({ id, first_name, last_name, role_id, manager_id }) => ({
+                name: `${first_name} ${last_name}`,
+                value: id
+            }))
+            // Query roles:
+            db.getRoles()
+                .then(([rows, fields]) => {
+                    const roles = rows;
+                    const roleList = roles.map(({ id, title, salary, department_id }) => ({
+                        name: title,
+                        value: id
+                    }))
+                    // Prompt for role change:
+                    inquirer.prompt([
+                        {
+                            type: 'list',
+                            name: 'employeeId',
+                            message: 'Which employee is changing roles?',
+                            choices: employeeList
+                        },
+                        {
+                            type: 'list',
+                            name: 'roleId',
+                            message: 'What role is this employee moving into?',
+                            choices: roleList
+                        }
+                    ])
+                    // Update employee role:
+                    .then(response => {
+                        const name = response;
+                        db.updateEmployeeRole(response.employeeId, response.roleId)
+                            .then(() => console.log(`Employee has changed roles.`))
+                            .then(() => console.log('*********************************'))
+                            .then(() => options())
+                    })
+                })
+        })
 };
 
 start();
