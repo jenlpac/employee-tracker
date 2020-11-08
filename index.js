@@ -1,6 +1,8 @@
 const inquirer = require ('inquirer');
-const { allowedNodeEnvironmentFlags } = require('process');
+const db = require('./db/queries');
+require('console.table');
 
+// Create app heading:
 function start() {
     console.log("**********************************");
     console.log("*                                *");
@@ -12,7 +14,7 @@ function start() {
 
 
 function options() {
-    
+    // Prompt initial questions:
     inquirer.prompt([
         {
             type: "list",
@@ -29,6 +31,7 @@ function options() {
             ]
         }
     ])
+    // Call specific functions based on choices:
     .then(choice => {
         switch(choice.options) {
             case "View all departments":
@@ -56,30 +59,43 @@ function options() {
     })
 };
 
+// View all departments:
 function viewDepartments() {
-    
+    db.getDepartments()
+        .then(([rows, fields]) => {
+            const departments = rows;
+            console.log('\n');
+            console.table(departments);
+        })
+        .then(() => options());
 };
 
+// View all rolls:
 function viewRoles() {
 
 };
 
+// View all employees:
 function viewEmployees() {
 
 };
 
+// Add new department:
 function addDepartment() {
 
 };
 
+// Add new role:
 function addRole() {
 
 };
 
+// Add new employee:
 function addEmployee() {
 
 };
 
+// Update employee role:
 function updateRole() {
 
 };

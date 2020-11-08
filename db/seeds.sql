@@ -1,7 +1,7 @@
 INSERT INTO department (name)
 VALUES
     ('Sales'),
-    ('Enineering'),
+    ('Engineering'),
     ('Finance'),
     ('Legal');
 
