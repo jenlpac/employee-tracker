@@ -74,14 +74,19 @@ function viewRoles() {
     db.getRoles()
         .then(([rows, fields]) => {
             const roles = rows;
-            console.table(departments);
+            console.table(roles);
         })
         .then(() => options());
 };
 
 // View all employees:
 function viewEmployees() {
-
+    db.getEmployees()
+        .then(([rows, fields]) => {
+            const employees = rows;
+            console.table(employees);
+        })
+        .then(() => options());
 };
 
 // Add new department:
