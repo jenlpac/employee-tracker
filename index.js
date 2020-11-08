@@ -99,17 +99,52 @@ function addDepartment() {
             message: 'What is the name of the new department?'
         }
     ])
+    // Create new department:
     .then(response => {
         const name = response;
         db.createDepartment(name)
-            .then(() => console.log(`Added ${name.name} to the database`))
+            .then(() => console.log(`Added ${name.name} to departments.`))
             .then(() => options());
     })
 };
 
 // Add new role:
 function addRole() {
-
+    // Get departments for role choices:
+    db.getDepartments()
+        .then(([rows, fields]) => {
+            const departments = rows;
+            const departmentList = departments.map(({ id, name }) => ({
+                name: name,
+                value: id
+            }))
+        
+            // Prompt for data:
+            inquirer.prompt([
+                {
+                    type: 'input',
+                    name: 'title',
+                    message: 'What is the title of the new role?'
+                },
+                {
+                    type: 'input',
+                    name: 'salary',
+                    message: 'What is the salary of this role?'
+                },
+                {
+                    type: 'list',
+                    name: 'department_id',
+                    choices: departmentList
+                }
+            ])
+            // Create new role:
+            .then(response => {
+                const name = response;
+                db.createRole(name)
+                    .then(() => console.log(`Added ${name.title} to roles.`))
+                    .then(() => options())
+            })
+        })
 };
 
 // Add new employee:
