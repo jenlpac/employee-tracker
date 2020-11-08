@@ -64,15 +64,19 @@ function viewDepartments() {
     db.getDepartments()
         .then(([rows, fields]) => {
             const departments = rows;
-            console.log('\n');
             console.table(departments);
         })
         .then(() => options());
 };
 
-// View all rolls:
+// View all roles:
 function viewRoles() {
-
+    db.getRoles()
+        .then(([rows, fields]) => {
+            const roles = rows;
+            console.table(departments);
+        })
+        .then(() => options());
 };
 
 // View all employees:

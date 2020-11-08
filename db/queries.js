@@ -11,6 +11,12 @@ class DB {
             `SELECT * FROM department;`
         );
     }
+    // Query to get all roles:
+    getRoles() {
+        return this.connection.promise().query(
+            `SELECT * FROM role;`
+        );
+    }
 }
 
 module.exports = new DB(connection);
