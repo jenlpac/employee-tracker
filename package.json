@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/jenlpac/employee-tracker/issues"
   },
-  "homepage": "https://github.com/jenlpac/employee-tracker#readme"
+  "homepage": "https://github.com/jenlpac/employee-tracker#readme",
+  "dependencies": {
+    "mysql2": "^2.2.5"
+  }
 }
