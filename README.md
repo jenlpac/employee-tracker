@@ -1,4 +1,4 @@
-# Employee Tracker Challenge #12
+# Employee Tracker
 
 ## Challenge Description:
 * Terminal application that allows a company to manage their payroll list.
